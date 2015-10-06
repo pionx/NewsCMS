@@ -1,0 +1,38 @@
+﻿@model NewsCMS.Models.User
+@{
+    ViewBag.Title = "LogIn";
+}
+
+<h2>LogIn</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend></legend>
+
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UserName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.UserName)
+            @Html.ValidationMessageFor(model => model.UserName)
+            @ViewBag.mensajeCorreo
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Password)
+        </div>
+        <div class="editor-field">
+            @Html.PasswordFor(model => model.Password)
+            @Html.ValidationMessageFor(model => model.Password)
+            @ViewBag.mensajeClave
+        </div>
+        <p>@ViewBag.errorCredenciales</p>
+        <p>
+            
+            <input type="submit" value="Log In" />
+        </p>
+    </fieldset>
+}

@@ -1,0 +1,72 @@
+﻿@model NewsCMS.Models.News
+
+@{
+    ViewBag.Title = "AddImage";
+}
+
+
+<div class="col-lg-12">
+    <h2>@Model.Title</h2><br />
+</div>
+
+
+  <div id="uploader">
+    <p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
+</div>
+<br />
+<a style="cursor:pointer;"onclick="history.go(-1);" >Go Back</a>
+
+
+<script src="~/Scripts/jquery-1.11.2.min.js"></script>
+<script>
+    // Initialize the widget when the DOM is ready
+    $(function () {
+        $("#uploader").plupload({
+
+            init:{
+                uploadcomplete: function (up) { window.location = '/News/Watch/@Model.ID' }
+            },
+
+            // General settings
+            runtimes: 'html5,flash,silverlight,html4',
+            url: "/Image/UploadImages/?NewsId=@Model.ID",
+
+            // Maximum file size
+            max_file_size: '2mb',
+
+            chunk_size: '1mb',
+
+           
+            // Specify what files to browse for
+            filters: [
+                { title: "Image files", extensions: "jpg,gif,png" },
+                { title: "Zip files", extensions: "zip,avi" }
+            ],
+
+            // Rename files by clicking on their titles
+            rename: true,
+
+            // Sort files
+            sortable: true,
+
+            // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
+            dragdrop: true,
+
+            // Views to activate
+            views: {
+                list: true,
+                thumbs: true, // Show thumbs
+                active: 'thumbs'
+            },
+
+            // Flash settings
+            flash_swf_url: '/plupload/js/Moxie.swf',
+
+            // Silverlight settings
+            silverlight_xap_url: '/plupload/js/Moxie.xap',
+
+        });
+
+    });
+   
+</script>

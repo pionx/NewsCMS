@@ -1,0 +1,12 @@
+﻿@model NewsCMS.Models.Image
+@{
+    ViewBag.Title = "Image";
+}
+
+<br />
+<p>
+@Html.ActionLink("Go Back", null, null, null, new { href = Request.UrlReferrer})
+</p>
+<img class="image col-lg-12" src="data:image/png;base64,@Convert.ToBase64String(@Model.ImageFile,0,@Model.ImageFile.Length)" height="500px"  />
+
+               

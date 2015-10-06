@@ -1,0 +1,158 @@
+﻿@model IEnumerable<NewsCMS.Models.Image>
+
+@{
+    ViewBag.Title = "DeleteImages";
+}
+
+<link href="~/Content/themes/base/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    /*article {
+        border: 1px solid black;
+    }*/
+    .item {
+        border: 1px solid black;
+        border-radius: 5px;
+        margin-top: 10px;
+        padding: 0;
+    }
+    .item:hover {
+        
+        cursor: pointer;
+    }
+    .item-hover {
+        background-color: #ddd;
+        cursor: pointer;
+    }
+    .checkbox-div {
+        padding: 0;
+    }
+    .image {
+        padding: 0;
+        border-radius: 5px;
+        
+    }
+    .image-div {
+        padding:15px;
+    }
+    .checkbox {
+         /* All browsers except webkit*/
+          transform: scale(5);
+
+          /* Webkit browsers*/
+          -webkit-transform: scale(3);
+          cursor:pointer;
+    }
+    .img-opacity {
+        opacity: 0.4;
+    filter: alpha(opacity=40); /* For IE8 and earlier */
+    }
+   
+</style>
+
+
+<h2>@ViewBag.News.Title</h2>
+
+<div style="margin-bottom: 20px; margin-top: 20px;" id="options" class="col-lg-12">
+    <button id="delete-selected" class="btn btn-default" onclick="deleteImages()">Delete selected</button>
+</div>
+
+<div class="col-lg-12">
+    @foreach(var item in Model){
+    <article id="article-@item.ID" class="col-lg-3">
+        <div id="@item.ID" class="item col-lg-12">
+            <div class="col-lg-12 checkbox-div">
+                <input id="check-@item.ID" class="checkbox" type="checkbox" />
+            </div>
+            <div class="col-lg-12 image-div">
+                <img id="img-@item.ID" class="image col-lg-12" src="data:image/png;base64,@Convert.ToBase64String(item.ImageFile,0,item.ImageFile.Length)" height="150px" width"200px"  />
+                
+            </div>
+        </div>
+    </article>
+    }
+</div>
+<div class="col-lg-12">
+    <br />
+    <a style="cursor:pointer;"onclick="history.go(-1);" >Go Back</a>
+</div>
+<script src="~/Scripts/jquery-1.11.2.min.js"></script>
+<script>
+
+    var imagesId = [];
+
+    $('.item').each(function () {
+        $(this).click(function () {
+            var id = $(this).attr('id');
+
+            for (var i = 0; i < imagesId.length; i++) {
+                if (id == imagesId[i]) {
+                    imagesId.splice(i, 1);
+                    console.log("id removed: " + id);
+                    deselectItem(id);
+                    $('#img-'+id).removeClass('img-opacity');
+                    $('#check-'+id).prop('checked', false);
+                    return true;
+                }
+            }
+
+            imagesId.push(id);
+            console.log("id added: " + id);
+            selectItem(id);
+            $('#img-' + id).addClass('img-opacity');
+            $('#check-'+id).prop('checked', true);
+        });
+    });
+
+    function selectItem(id){
+        $('#'+id).addClass('item-hover');
+    }
+
+    function deselectItem(id) {
+        $('#' + id).removeClass('item-hover');
+    }
+   
+
+    function deleteImages() {
+        var postData = { imagesId: imagesId };
+
+        $.ajax({
+            type: "POST",
+            url: "/Image/deleteImages",
+            data: postData,
+            success: function (data) {
+
+                if (data == false) {
+                    console.log("ajax success: false, delete images failed");
+
+                } else {
+                    console.log("ajax success: true, delete images");
+                    
+                    removeItems();
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log("ajax error: when deleting images");
+            },
+            dataType: "json",
+            traditional: true
+        });
+    }
+
+    function removeItems() {
+        for (var i = 0; i < imagesId.length; i++) {
+            $('#article-' + imagesId[i]).fadeOut();
+        }
+        imagesId = [];
+    }
+
+    setInterval(function () {
+        if (imagesId.length > 0) {
+            $('#delete-selected').attr('disabled', false);
+        } else {
+            $('#delete-selected').attr('disabled', true);
+        }
+    }, 150);
+
+
+</script>

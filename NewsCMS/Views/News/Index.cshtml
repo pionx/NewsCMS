@@ -1,0 +1,41 @@
+﻿@model IEnumerable<NewsCMS.Models.News>
+
+@{
+    ViewBag.Title = "News";
+}
+
+<script src="~/Scripts/bootstrap.min.js"></script>
+<link href="~/Content/themes/base/bootstrap.min.css" rel="stylesheet" />
+
+   
+<h2>News</h2>
+    <table class="table table-bordered table-hover col-lg-2">
+    
+
+    @foreach (var item in Model) {
+        <tr>
+            <td class="col-lg-8">
+                <a href="@Url.Action("watch", new { id = item.ID})">
+                    @Html.DisplayFor(modelItem => item.Title)
+                </a>
+            </td>
+            @if(ViewBag.userLogged == true){
+            <td class="col-lg-4">
+                @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.ID })|
+                @Html.ActionLink("Add Images", "AddImage", "Image", new { id=item.ID }, null)|
+                @Html.ActionLink("Delete Images", "Delete", "Image", new { id=item.ID }, null)
+            </td>
+            }
+       
+        </tr>
+    }
+    
+    </table>
+@if(ViewBag.userLogged == true){
+    <p>
+        <h3>@Html.ActionLink("Create News", "Create")</h3>
+    </p>
+}
+
+

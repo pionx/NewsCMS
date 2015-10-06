@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="NewsDataBaseModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="NewsDataBaseEntities" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="Images" EntityType="NewsDataBaseModel.Image" />
+    <EntitySet Name="News" EntityType="NewsDataBaseModel.News" />
+    <EntitySet Name="Users" EntityType="NewsDataBaseModel.User" />
+    <AssociationSet Name="FK__Images__NewsID__1273C1CD" Association="NewsDataBaseModel.FK__Images__NewsID__1273C1CD">
+      <End Role="News" EntitySet="News" />
+      <End Role="Images" EntitySet="Images" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Image">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="NewsID" Type="Int32" Nullable="false" />
+    <Property Name="ImageFile" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+    <Property Name="Ext" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="News" Relationship="NewsDataBaseModel.FK__Images__NewsID__1273C1CD" FromRole="Images" ToRole="News" />
+  </EntityType>
+  <EntityType Name="News">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+    <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="Images" Relationship="NewsDataBaseModel.FK__Images__NewsID__1273C1CD" FromRole="News" ToRole="Images" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK__Images__NewsID__1273C1CD">
+    <End Role="News" Type="NewsDataBaseModel.News" Multiplicity="1" />
+    <End Role="Images" Type="NewsDataBaseModel.Image" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="News">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Images">
+        <PropertyRef Name="NewsID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
